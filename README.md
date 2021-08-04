@@ -1,5 +1,7 @@
 # Fast Free Fermion Compiler: F3C++
 
+<p align="center"><img src="doc/doxygen/images/logo200x200.png?raw=true" /></p>
+
 F3C++ is an object-oriented, fully templated C++ package for compiling
 time-evolution quantum circuits of spin Hamiltonians that can be mapped to free
 fermions. F3C++ is build on top of QCLAB++ and provides I/O through openQASM
