@@ -1,0 +1,5 @@
+import os,sys
+import subprocess
+
+subprocess.run(["@F3C_TIME_EVOLUTION_XY@", "{}".format(sys.argv[1])])
+
