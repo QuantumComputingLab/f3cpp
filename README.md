@@ -1,4 +1,4 @@
-# Fast Free Fermion Compiler: F3C++
+# Fast Free Fermion Compiler: F3C++ [![DOI](https://zenodo.org/badge/392768480.svg)](https://zenodo.org/badge/latestdoi/392768480)
 
 <p align="center"><img src="doc/doxygen/images/logo200x200.png?raw=true" /></p>
 
