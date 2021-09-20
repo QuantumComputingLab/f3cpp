@@ -123,8 +123,8 @@ namespace f3c {
          *        rotations `rot0` = \f$\theta_0\f$ and `rot1` = \f$\theta_1\f$.
          */
         void update( const rotation_type& rot0 , const rotation_type& rot1 ) {
-          rotations_[0].update( rot0.angle() ) ;
-          rotations_[1].update( rot1.angle() ) ;
+          rotations_[0] = rot0 ;
+          rotations_[1] = rot1 ;
         }
 
         /**

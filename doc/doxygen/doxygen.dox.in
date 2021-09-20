@@ -867,12 +867,18 @@ WARN_LOGFILE           =
 INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/SquareCircuit.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/TriangleCircuit.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/util.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/concepts.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/turnover.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/turnoverSU2.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qasm.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/TwoAxesQRotationGate2.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/TFTwoAxesQRotationGate2.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationXY.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationXZ.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationYZ.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationTFXY.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationTFXZ.hpp \
+                         @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationTFYZ.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/RotationTFXYMatrix.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/include/f3c/qgates/functors.hpp \
                          @CMAKE_CURRENT_SOURCE_DIR@/doc/doxygen/pages/Overview.txt

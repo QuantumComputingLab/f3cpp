@@ -13,6 +13,12 @@ namespace f3c {
     template <typename T>
     class RotationTFXY ;
 
+    template <typename T>
+    class RotationTFXZ ;
+
+    template <typename T>
+    class RotationTFYZ ;
+
     /**
      * \class RotationTFXYMatrix
      * \brief 2-qubit transverse field rotation gate about XY.
@@ -81,6 +87,26 @@ namespace f3c {
          *        gate `gate`.
          */
         RotationTFXYMatrix( const RotationTFXY< T >& gate )
+        {
+          setQubits( &(gate.qubits()[0]) ) ;
+          update( gate.a() , gate.b() , gate.c() , gate.d() ) ;
+        } // RotationTFXYMatrix(gate)
+
+        /**
+         * \brief Constructs a TFXY-rotation gate from the given TFXZ-rotation
+         *        gate `gate`.
+         */
+        RotationTFXYMatrix( const RotationTFXZ< T >& gate )
+        {
+          setQubits( &(gate.qubits()[0]) ) ;
+          update( gate.a() , gate.b() , gate.c() , gate.d() ) ;
+        } // RotationTFXYMatrix(gate)
+
+        /**
+         * \brief Constructs a TFXY-rotation gate from the given TFYZ-rotation
+         *        gate `gate`.
+         */
+        RotationTFXYMatrix( const RotationTFYZ< T >& gate )
         {
           setQubits( &(gate.qubits()[0]) ) ;
           update( gate.a() , gate.b() , gate.c() , gate.d() ) ;

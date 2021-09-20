@@ -1,12 +1,17 @@
 add_executable( f3c_tests run.cpp
                           qgates/RotationXY.cpp
+                          qgates/RotationXZ.cpp
+                          qgates/RotationYZ.cpp
                           qgates/RotationTFXY.cpp
+                          qgates/RotationTFXZ.cpp
+                          qgates/RotationTFYZ.cpp
                           qgates/RotationTFXYMatrix.cpp
                           SquareCircuit.cpp
                           TriangleCircuit.cpp
                           util.cpp
                           turnoverSU2.cpp
                           turnover.cpp
+                          concepts.cpp
               )
 target_link_libraries( f3c_tests PUBLIC f3cpp qclabpp gtest )
 target_include_directories( f3c_tests PUBLIC ${PROJECT_SOURCE_DIR}/test )

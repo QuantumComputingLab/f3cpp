@@ -45,12 +45,14 @@ The recommended way of building F3C++ is as follows:
 
 ## References
 The F3C compiler is based on:
-- An Algebraic Quantum Circuit Compression Algorithm for Hamiltonian Simulation,
+- [An Algebraic Quantum Circuit Compression Algorithm for Hamiltonian Simulation](https://arxiv.org/abs/2108.03283),
   Daan Camps, Efekan K&ouml;ck&uuml;, Lindsay Bassman, Wibe A. de Jong,
-  Alexander F. Kemper, and Roel Van Beeumen (2021)
-- Algebraic Compression of Quantum Circuits for Hamiltonian Evolution,
-  Efekan K&ouml;ck&uuml;, Daan Camps, Lindsay Bassman, J. K. Freericks,
-  Wibe A. de Jong, Roel Van Beeumen, and Alexander F. Kemper (2021)
+  Alexander F. Kemper, and Roel Van Beeumen
+  (2021) [arXiv:2108.03283](https://arxiv.org/abs/2108.03283)
+- [Algebraic Compression of Quantum Circuits for Hamiltonian Evolution](https://arxiv.org/abs/2108.03282),
+  Efekan K&ouml;ck&uuml;, Daan Camps, Lindsay Bassman, James K. Freericks,
+  Wibe A. de Jong, Roel Van Beeumen, and Alexander F. Kemper
+  (2021) [arXiv:2108.03282](https://arxiv.org/abs/2108.03282)
 
 
 ## Developers - Lawrence Berkeley National Laboratory

@@ -4,21 +4,151 @@
 #define f3c_turnover_hpp
 
 #include "f3c/util.hpp"
+#include "f3c/concepts.hpp"
 #include "f3c/turnoverSU2.hpp"
-#include "f3c/qgates/RotationXY.hpp"
-#include "f3c/qgates/RotationTFXY.hpp"
 #include "f3c/qgates/RotationTFXYMatrix.hpp"
 
 namespace f3c {
 
-  /// Computes the turnover operation of 3 XY-rotation gates.
-  template <typename T>
-  void turnover( const f3c::qgates::RotationXY< T >& gate1 ,
-                 const f3c::qgates::RotationXY< T >& gate2 ,
-                 const f3c::qgates::RotationXY< T >& gate3 ,
-                 std::unique_ptr< f3c::qgates::RotationXY< T > >& gateA ,
-                 std::unique_ptr< f3c::qgates::RotationXY< T > >& gateB ,
-                 std::unique_ptr< f3c::qgates::RotationXY< T > >& gateC ) {
+  /**
+   * \brief Computes the turnover operation of X-Y-X / Y-X-Y / X-Z-X / Z-X-Z /
+   *        Y-Z-Y / Z-Y-Z rotation gates.
+   */
+  template <typename G1, typename G2,
+            std::enable_if_t< f3c::is_one_axis1_v< G1 > &&
+                              f3c::is_one_axis1_v< G2 > &&
+                              !std::is_same_v< G1 , G2 > , bool > = true >
+  void turnover( const G1& gate1 ,
+                 const G2& gate2 ,
+                 const G1& gate3 ,
+                 std::unique_ptr< G2 >& gateA ,
+                 std::unique_ptr< G1 >& gateB ,
+                 std::unique_ptr< G2 >& gateC ) {
+
+    // checks
+    const auto q = gate1.qubit() ;
+    assert( gate2.qubit() == q ) ;
+    assert( gate3.qubit() == q ) ;
+
+    // SU(2) turnover
+    const auto [ rotA , rotB , rotC ] = turnoverSU2( gate1.rotation() ,
+                                                     gate2.rotation() ,
+                                                     gate3.rotation() ) ;
+
+    // new gates
+    gateA = std::make_unique< G2 >( q , rotA ) ;
+    gateB = std::make_unique< G1 >( q , rotB ) ;
+    gateC = std::make_unique< G2 >( q , rotC ) ;
+
+  }
+
+  /**
+   * \brief Computes the turnover operation of X-YY-X / Y-XX-Y /
+   *        X-ZZ-X / Z-XX-Z / Y-ZZ-Y / Z-YY-Z rotation gates.
+   */
+  template <typename G1, typename G2,
+            std::enable_if_t< f3c::is_one_axis1_v< G1 > &&
+                              f3c::is_one_axis2_v< G2 > &&
+                              !f3c::is_same_axis_v< G1 , G2 > , bool > = true >
+  void turnover( const G1& gate1 ,
+                 const G2& gate2 ,
+                 const G1& gate3 ,
+                 std::unique_ptr< G2 >& gateA ,
+                 std::unique_ptr< G1 >& gateB ,
+                 std::unique_ptr< G2 >& gateC ) {
+
+    // checks
+    const auto q1 = gate1.qubit() ;
+    const auto q2 = gate2.qubits() ;
+    assert( ( q1 == q2[0] ) || ( q1 == q2[1] ) ) ;
+
+    // SU(2) turnover
+    const auto [ rotA , rotB , rotC ] = turnoverSU2( gate1.rotation() ,
+                                                     gate2.rotation() ,
+                                                     gate3.rotation() ) ;
+
+    // new gates
+    gateA = std::make_unique< G2 >( q2[0] , q2[1] , rotA ) ;
+    gateB = std::make_unique< G1 >( q1 , rotB ) ;
+    gateC = std::make_unique< G2 >( q2[0] , q2[1] , rotC ) ;
+
+  }
+
+  /**
+   * \brief Computes the turnover operation of XX-Y-XX / YY-X-YY /
+   *        XX-Z-XX / ZZ-X-ZZ / YY-Z-YY / ZZ-Y-ZZ rotation gates.
+   */
+  template <typename G1, typename G2,
+            std::enable_if_t< f3c::is_one_axis2_v< G1 > &&
+                              f3c::is_one_axis1_v< G2 > &&
+                              !f3c::is_same_axis_v< G1 , G2 > , bool > = true >
+  void turnover( const G1& gate1 ,
+                 const G2& gate2 ,
+                 const G1& gate3 ,
+                 std::unique_ptr< G2 >& gateA ,
+                 std::unique_ptr< G1 >& gateB ,
+                 std::unique_ptr< G2 >& gateC ) {
+
+    // checks
+    const auto q1 = gate1.qubits() ;
+    const auto q2 = gate2.qubit() ;
+    assert( ( q1[0] == q2 ) || ( q1[1] == q2 ) ) ;
+
+    // SU(2) turnover
+    const auto [ rotA , rotB , rotC ] = turnoverSU2( gate1.rotation() ,
+                                                     gate2.rotation() ,
+                                                     gate3.rotation() ) ;
+
+    // new gates
+    gateA = std::make_unique< G2 >( q2 , rotA ) ;
+    gateB = std::make_unique< G1 >( q1[0] , q1[1] , rotB ) ;
+    gateC = std::make_unique< G2 >( q2 , rotC ) ;
+
+  }
+
+  /**
+   * \brief Computes the turnover operation of XX-YY-XX / YY-XX-YY / XX-ZZ-XX /
+   *        ZZ-XX-ZZ / YY-ZZ-YY / ZZ-YY-ZZ rotation gates.
+   */
+  template <typename G1, typename G2,
+            std::enable_if_t< f3c::is_one_axis2_v< G1 > &&
+                              f3c::is_one_axis2_v< G2 > &&
+                              !std::is_same_v< G1 , G2 > , bool > = true >
+  void turnover( const G1& gate1 ,
+                 const G2& gate2 ,
+                 const G1& gate3 ,
+                 std::unique_ptr< G2 >& gateA ,
+                 std::unique_ptr< G1 >& gateB ,
+                 std::unique_ptr< G2 >& gateC ) {
+
+    // checks
+    const auto q1 = gate1.qubits() ;
+    const auto q2 = gate2.qubits() ;
+    assert( q1[0] == gate3.qubits()[0] ) ;
+    assert( q1[1] == gate3.qubits()[1] ) ;
+    assert( ( q2[0] == q1[1] ) || ( q2[1] == q1[0] ) ) ;
+
+    // SU(2) turnover
+    const auto [ rotA , rotB , rotC ] = turnoverSU2( gate1.rotation() ,
+                                                     gate2.rotation() ,
+                                                     gate3.rotation() ) ;
+
+    // new gates
+    gateA = std::make_unique< G2 >( q2[0] , q2[1] , rotA ) ;
+    gateB = std::make_unique< G1 >( q1[0] , q1[1] , rotB ) ;
+    gateC = std::make_unique< G2 >( q2[0] , q2[1] , rotC ) ;
+
+  }
+
+  /// Computes the turnover operation of 3 XY/XZ/YZ-rotation gates.
+  template <typename G,
+            std::enable_if_t< f3c::is_two_axes_v< G > , bool > = true >
+  void turnover( const G& gate1 ,
+                 const G& gate2 ,
+                 const G& gate3 ,
+                 std::unique_ptr< G >& gateA ,
+                 std::unique_ptr< G >& gateB ,
+                 std::unique_ptr< G >& gateC ) {
 
     // checks
     const auto q1 = gate1.qubits() ;
@@ -35,14 +165,13 @@ namespace f3c {
     const auto [ rotA1 , rotB1 , rotC1 ] = turnoverSU2( rot11 , rot20 , rot31 );
 
     // new gates
-    using RXY = f3c::qgates::RotationXY< T > ;
-    gateA = std::make_unique< RXY >( q2[0] , q2[1] , rotA1 , rotA0 ) ;
-    gateB = std::make_unique< RXY >( q1[0] , q1[1] , rotB0 , rotB1 ) ;
-    gateC = std::make_unique< RXY >( q2[0] , q2[1] , rotC1 , rotC0 ) ;
+    gateA = std::make_unique< G >( q2[0] , q2[1] , rotA1 , rotA0 ) ;
+    gateB = std::make_unique< G >( q1[0] , q1[1] , rotB0 , rotB1 ) ;
+    gateC = std::make_unique< G >( q2[0] , q2[1] , rotC1 , rotC0 ) ;
 
   }
 
-  /// Computes the turnover operation of 3 TFXY-rotation gates.
+  /// Computes the turnover operation of 3 TFXY-rotation matrix gates.
   template <typename T>
   void turnover( const f3c::qgates::RotationTFXYMatrix< T >& gate1 ,
                  const f3c::qgates::RotationTFXYMatrix< T >& gate2 ,
@@ -273,14 +402,40 @@ namespace f3c {
 
   }
 
+  /// Computes the turnover operation of 3 TFXY/TFXZ/TFYZ-rotation gates.
+  template <typename G,
+            std::enable_if_t< f3c::is_TF_two_axes_v< G > , bool > = true >
+  void turnover( const G& gate1 ,
+                 const G& gate2 ,
+                 const G& gate3 ,
+                 std::unique_ptr< G >& gateA ,
+                 std::unique_ptr< G >& gateB ,
+                 std::unique_ptr< G >& gateC ) {
+    using T = typename G::value_type ;
+    using TFXY = f3c::qgates::RotationTFXYMatrix< T > ;
+    // convert to rotation TFXY matrix gates
+    const auto g1 = TFXY( gate1 ) ;
+    const auto g2 = TFXY( gate2 ) ;
+    const auto g3 = TFXY( gate3 ) ;
+    std::unique_ptr< TFXY >  gA ;
+    std::unique_ptr< TFXY >  gB ;
+    std::unique_ptr< TFXY >  gC ;
+    // turnover
+    turnover( g1 , g2 , g3 , gA , gB , gC ) ;
+    // convert back to type G
+    gateA = std::make_unique< G >( *gA ) ;
+    gateB = std::make_unique< G >( *gB ) ;
+    gateC = std::make_unique< G >( *gC ) ;
+  }
+
   /// Computes the turnover operation of 3 gates.
-  template <typename G>
-  std::tuple< G , G , G > turnover( const G& gate1 ,
-                                    const G& gate2 ,
-                                    const G& gate3 ) {
-    std::unique_ptr< G >  gateA ;
-    std::unique_ptr< G >  gateB ;
-    std::unique_ptr< G >  gateC ;
+  template <typename G1, typename G2>
+  std::tuple< G2 , G1 , G2 > turnover( const G1& gate1 ,
+                                       const G2& gate2 ,
+                                       const G1& gate3 ) {
+    std::unique_ptr< G2 >  gateA ;
+    std::unique_ptr< G1 >  gateB ;
+    std::unique_ptr< G2 >  gateC ;
     turnover( gate1 , gate2 , gate3 , gateA , gateB , gateC ) ;
     return { *gateA , *gateB , *gateC } ;
   }

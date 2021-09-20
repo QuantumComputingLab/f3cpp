@@ -53,12 +53,12 @@ void test_f3c_qgates_RotationTFXY() {
     const R theta3( -pi/7 ) ;
     const R theta4( -pi/5 ) ;
     const R theta5(  pi/9 ) ;
-    qclab::QRotation< R >  rot0n( theta0 + theta1 ) ;
-    qclab::QRotation< R >  rot1n( theta0 - theta1 ) ;
-    qclab::QRotation< R >  rot2n( theta2 + theta3 ) ;
-    qclab::QRotation< R >  rot3n( theta2 - theta3 ) ;
-    qclab::QRotation< R >  rot4n( theta4 + theta5 ) ;
-    qclab::QRotation< R >  rot5n( theta4 - theta5 ) ;
+    qclab::QRotation< R >  rot0n( theta0 ) ;
+    qclab::QRotation< R >  rot1n( theta1 ) ;
+    qclab::QRotation< R >  rot2n( theta2 ) ;
+    qclab::QRotation< R >  rot3n( theta3 ) ;
+    qclab::QRotation< R >  rot4n( theta4 ) ;
+    qclab::QRotation< R >  rot5n( theta5 ) ;
     TFRxy.update( rot0n , rot1n , rot2n , rot3n , rot4n , rot5n  ) ;
     {
       EXPECT_TRUE( TFRxy.rotation0() == rot0n ) ;
@@ -165,18 +165,18 @@ void test_f3c_qgates_RotationTFXY() {
   {
     const R theta0(  pi/4 ) ;
     const R theta1(  pi/3 ) ;
-    qclab::QRotation< R >  rot0( theta0 + theta1 ) ;
-    qclab::QRotation< R >  rot1( theta0 - theta1 ) ;
+    qclab::QRotation< R >  rot0( theta0 ) ;
+    qclab::QRotation< R >  rot1( theta1 ) ;
 
     const R theta2(  pi/2 ) ;
     const R theta3( -pi/7 ) ;
-    qclab::QRotation< R >  rot2( theta2 + theta3 ) ;
-    qclab::QRotation< R >  rot3( theta2 - theta3 ) ;
+    qclab::QRotation< R >  rot2( theta2 ) ;
+    qclab::QRotation< R >  rot3( theta3 ) ;
 
     const R theta4( -pi/5 ) ;
     const R theta5(  pi/9 ) ;
-    qclab::QRotation< R >  rot4( theta4 + theta5 ) ;
-    qclab::QRotation< R >  rot5( theta4 - theta5 ) ;
+    qclab::QRotation< R >  rot4( theta4 ) ;
+    qclab::QRotation< R >  rot5( theta5 ) ;
 
     f3c::qgates::RotationTFXY< T >  TFRxy( rot0 , rot1 , rot2 ,
                                            rot3 , rot4 , rot5 ) ;
@@ -204,6 +204,20 @@ void test_f3c_qgates_RotationTFXY() {
     EXPECT_NEAR( th3 , theta3 , eps ) ;   // theta3
     EXPECT_NEAR( th4 , theta4 , eps ) ;   // theta4
     EXPECT_NEAR( th5 , theta5 , eps ) ;   // theta5
+
+    const T a(  3.794721175389957e-01 , -3.729062113342866e-01 ) ;
+    const T b(  6.893313103595740e-01 ,  4.916952451638431e-01 ) ;
+    const T c( -1.863215602624727e-01 , -4.983396498599911e-01 ) ;
+    const T d( -7.369512296884874e-01 , -4.169469446097490e-01 ) ;
+
+    EXPECT_NEAR( std::real( TFRxy.a() ) , std::real( a ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.a() ) , std::imag( a ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.b() ) , std::real( b ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.b() ) , std::imag( b ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.c() ) , std::real( c ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.c() ) , std::imag( c ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.d() ) , std::real( d ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.d() ) , std::imag( d ) , eps ) ;
   }
 
   {
@@ -216,29 +230,43 @@ void test_f3c_qgates_RotationTFXY() {
     f3c::qgates::RotationTFXY< T >  TFRxy( theta0 , theta1 , theta2 ,
                                            theta3 , theta4 , theta5 ) ;
 
-    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;                  // nbQubits
-    EXPECT_FALSE( TFRxy.fixed() ) ;                      // fixed
-    EXPECT_FALSE( TFRxy.controlled() ) ;                 // controlled
+    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;         // nbQubits
+    EXPECT_FALSE( TFRxy.fixed() ) ;             // fixed
+    EXPECT_FALSE( TFRxy.controlled() ) ;        // controlled
 
     auto qubits = TFRxy.qubits() ;
-    EXPECT_EQ( qubits[0] , 0 ) ;                         // qubit0
-    EXPECT_EQ( qubits[1] , 1 ) ;                         // qubit1
+    EXPECT_EQ( qubits[0] , 0 ) ;                // qubit0
+    EXPECT_EQ( qubits[1] , 1 ) ;                // qubit1
 
     auto [ th0 , th1 , th2 , th3 , th4 , th5 ] = TFRxy.thetas() ;
-    EXPECT_NEAR( th0 , theta0 , eps ) ;                  // theta0
-    EXPECT_NEAR( th1 , theta1 , eps ) ;                  // theta1
-    EXPECT_NEAR( th2 , theta2 , eps ) ;                  // theta2
-    EXPECT_NEAR( th3 , theta3 , eps ) ;                  // theta3
-    EXPECT_NEAR( th4 , theta4 , eps ) ;                  // theta4
-    EXPECT_NEAR( th5 , theta5 , eps ) ;                  // theta5
+    EXPECT_NEAR( th0 , theta0 , eps ) ;         // theta0
+    EXPECT_NEAR( th1 , theta1 , eps ) ;         // theta1
+    EXPECT_NEAR( th2 , theta2 , eps ) ;         // theta2
+    EXPECT_NEAR( th3 , theta3 , eps ) ;         // theta3
+    EXPECT_NEAR( th4 , theta4 , eps ) ;         // theta4
+    EXPECT_NEAR( th5 , theta5 , eps ) ;         // theta5
 
     auto [ r0 , r1 , r2 , r3 , r4 , r5 ] = TFRxy.rotations() ;
-    EXPECT_NEAR( r0.theta() , theta0 + theta1 , eps ) ;  // rot0
-    EXPECT_NEAR( r1.theta() , theta0 - theta1 , eps ) ;  // rot1
-    EXPECT_NEAR( r2.theta() , theta2 + theta3 , eps ) ;  // rot2
-    EXPECT_NEAR( r3.theta() , theta2 - theta3 , eps ) ;  // rot3
-    EXPECT_NEAR( r4.theta() , theta4 + theta5 , eps ) ;  // rot4
-    EXPECT_NEAR( r5.theta() , theta4 - theta5 , eps ) ;  // rot5
+    EXPECT_NEAR( r0.theta() , theta0 , eps ) ;  // rot0
+    EXPECT_NEAR( r1.theta() , theta1 , eps ) ;  // rot1
+    EXPECT_NEAR( r2.theta() , theta2 , eps ) ;  // rot2
+    EXPECT_NEAR( r3.theta() , theta3 , eps ) ;  // rot3
+    EXPECT_NEAR( r4.theta() , theta4 , eps ) ;  // rot4
+    EXPECT_NEAR( r5.theta() , theta5 , eps ) ;  // rot5
+
+    const T a(  3.794721175389957e-01 , -3.729062113342866e-01 ) ;
+    const T b(  6.893313103595740e-01 ,  4.916952451638431e-01 ) ;
+    const T c( -1.863215602624727e-01 , -4.983396498599911e-01 ) ;
+    const T d( -7.369512296884874e-01 , -4.169469446097490e-01 ) ;
+
+    EXPECT_NEAR( std::real( TFRxy.a() ) , std::real( a ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.a() ) , std::imag( a ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.b() ) , std::real( b ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.b() ) , std::imag( b ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.c() ) , std::real( c ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.c() ) , std::imag( c ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.d() ) , std::real( d ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.d() ) , std::imag( d ) , eps ) ;
   }
 
 
@@ -251,18 +279,18 @@ void test_f3c_qgates_RotationTFXY() {
 
     const R theta0(  pi/4 ) ;
     const R theta1(  pi/3 ) ;
-    qclab::QRotation< R >  rot0( theta0 + theta1 ) ;
-    qclab::QRotation< R >  rot1( theta0 - theta1 ) ;
+    qclab::QRotation< R >  rot0( theta0 ) ;
+    qclab::QRotation< R >  rot1( theta1 ) ;
 
     const R theta2(  pi/2 ) ;
     const R theta3( -pi/7 ) ;
-    qclab::QRotation< R >  rot2( theta2 + theta3 ) ;
-    qclab::QRotation< R >  rot3( theta2 - theta3 ) ;
+    qclab::QRotation< R >  rot2( theta2 ) ;
+    qclab::QRotation< R >  rot3( theta3 ) ;
 
     const R theta4( -pi/5 ) ;
     const R theta5(  pi/9 ) ;
-    qclab::QRotation< R >  rot4( theta4 + theta5 ) ;
-    qclab::QRotation< R >  rot5( theta4 - theta5 ) ;
+    qclab::QRotation< R >  rot4( theta4 ) ;
+    qclab::QRotation< R >  rot5( theta5 ) ;
 
     f3c::qgates::RotationTFXY< T >  TFRxy( qubit0 , qubit1 ,
                                            rot0 , rot1 , rot2 ,
@@ -291,6 +319,20 @@ void test_f3c_qgates_RotationTFXY() {
     EXPECT_NEAR( th3 , theta3 , eps ) ;   // theta3
     EXPECT_NEAR( th4 , theta4 , eps ) ;   // theta4
     EXPECT_NEAR( th5 , theta5 , eps ) ;   // theta5
+
+    const T a(  3.794721175389957e-01 , -3.729062113342866e-01 ) ;
+    const T b(  6.893313103595740e-01 ,  4.916952451638431e-01 ) ;
+    const T c( -1.863215602624727e-01 , -4.983396498599911e-01 ) ;
+    const T d( -7.369512296884874e-01 , -4.169469446097490e-01 ) ;
+
+    EXPECT_NEAR( std::real( TFRxy.a() ) , std::real( a ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.a() ) , std::imag( a ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.b() ) , std::real( b ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.b() ) , std::imag( b ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.c() ) , std::real( c ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.c() ) , std::imag( c ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.d() ) , std::real( d ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.d() ) , std::imag( d ) , eps ) ;
   }
 
   {
@@ -306,29 +348,43 @@ void test_f3c_qgates_RotationTFXY() {
                                            theta0 , theta1 , theta2 ,
                                            theta3 , theta4 , theta5 ) ;
 
-    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;                  // nbQubits
-    EXPECT_FALSE( TFRxy.fixed() ) ;                      // fixed
-    EXPECT_FALSE( TFRxy.controlled() ) ;                 // controlled
+    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;         // nbQubits
+    EXPECT_FALSE( TFRxy.fixed() ) ;             // fixed
+    EXPECT_FALSE( TFRxy.controlled() ) ;        // controlled
 
     auto qubits = TFRxy.qubits() ;
-    EXPECT_EQ( qubits[0] , qubit0 ) ;                    // qubit0
-    EXPECT_EQ( qubits[1] , qubit1 ) ;                    // qubit1
+    EXPECT_EQ( qubits[0] , qubit0 ) ;           // qubit0
+    EXPECT_EQ( qubits[1] , qubit1 ) ;           // qubit1
 
     auto [ th0 , th1 , th2 , th3 , th4 , th5 ] = TFRxy.thetas() ;
-    EXPECT_NEAR( th0 , theta0 , eps ) ;                  // theta0
-    EXPECT_NEAR( th1 , theta1 , eps ) ;                  // theta1
-    EXPECT_NEAR( th2 , theta2 , eps ) ;                  // theta2
-    EXPECT_NEAR( th3 , theta3 , eps ) ;                  // theta3
-    EXPECT_NEAR( th4 , theta4 , eps ) ;                  // theta4
-    EXPECT_NEAR( th5 , theta5 , eps ) ;                  // theta5
+    EXPECT_NEAR( th0 , theta0 , eps ) ;         // theta0
+    EXPECT_NEAR( th1 , theta1 , eps ) ;         // theta1
+    EXPECT_NEAR( th2 , theta2 , eps ) ;         // theta2
+    EXPECT_NEAR( th3 , theta3 , eps ) ;         // theta3
+    EXPECT_NEAR( th4 , theta4 , eps ) ;         // theta4
+    EXPECT_NEAR( th5 , theta5 , eps ) ;         // theta5
 
     auto [ r0 , r1 , r2 , r3 , r4 , r5 ] = TFRxy.rotations() ;
-    EXPECT_NEAR( r0.theta() , theta0 + theta1 , eps ) ;  // rot0
-    EXPECT_NEAR( r1.theta() , theta0 - theta1 , eps ) ;  // rot1
-    EXPECT_NEAR( r2.theta() , theta2 + theta3 , eps ) ;  // rot2
-    EXPECT_NEAR( r3.theta() , theta2 - theta3 , eps ) ;  // rot3
-    EXPECT_NEAR( r4.theta() , theta4 + theta5 , eps ) ;  // rot4
-    EXPECT_NEAR( r5.theta() , theta4 - theta5 , eps ) ;  // rot5
+    EXPECT_NEAR( r0.theta() , theta0 , eps ) ;  // rot0
+    EXPECT_NEAR( r1.theta() , theta1 , eps ) ;  // rot1
+    EXPECT_NEAR( r2.theta() , theta2 , eps ) ;  // rot2
+    EXPECT_NEAR( r3.theta() , theta3 , eps ) ;  // rot3
+    EXPECT_NEAR( r4.theta() , theta4 , eps ) ;  // rot4
+    EXPECT_NEAR( r5.theta() , theta5 , eps ) ;  // rot5
+
+    const T a(  3.794721175389957e-01 , -3.729062113342866e-01 ) ;
+    const T b(  6.893313103595740e-01 ,  4.916952451638431e-01 ) ;
+    const T c( -1.863215602624727e-01 , -4.983396498599911e-01 ) ;
+    const T d( -7.369512296884874e-01 , -4.169469446097490e-01 ) ;
+
+    EXPECT_NEAR( std::real( TFRxy.a() ) , std::real( a ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.a() ) , std::imag( a ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.b() ) , std::real( b ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.b() ) , std::imag( b ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.c() ) , std::real( c ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.c() ) , std::imag( c ) , eps ) ;
+    EXPECT_NEAR( std::real( TFRxy.d() ) , std::real( d ) , eps ) ;
+    EXPECT_NEAR( std::imag( TFRxy.d() ) , std::imag( d ) , eps ) ;
   }
 
 
@@ -347,13 +403,13 @@ void test_f3c_qgates_RotationTFXY() {
 
     f3c::qgates::RotationTFXY< T >  TFRxy( TFRxyMat ) ;
 
-    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;                  // nbQubits
-    EXPECT_FALSE( TFRxy.fixed() ) ;                      // fixed
-    EXPECT_FALSE( TFRxy.controlled() ) ;                 // controlled
+    EXPECT_EQ( TFRxy.nbQubits() , 2 ) ;   // nbQubits
+    EXPECT_FALSE( TFRxy.fixed() ) ;       // fixed
+    EXPECT_FALSE( TFRxy.controlled() ) ;  // controlled
 
     auto qubits = TFRxy.qubits() ;
-    EXPECT_EQ( qubits[0] , qubit0 ) ;                    // qubit0
-    EXPECT_EQ( qubits[1] , qubit1 ) ;                    // qubit1
+    EXPECT_EQ( qubits[0] , qubit0 ) ;     // qubit0
+    EXPECT_EQ( qubits[1] , qubit1 ) ;     // qubit1
 
     EXPECT_NEAR( std::real( TFRxy.a() ) , std::real( a ) , 10*eps ) ;
     EXPECT_NEAR( std::imag( TFRxy.a() ) , std::imag( a ) , 10*eps ) ;

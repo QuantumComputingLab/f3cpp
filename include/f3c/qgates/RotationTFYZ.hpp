@@ -1,60 +1,64 @@
 //  (C) Copyright Roel Van Beeumen and Daan Camps 2021.
 
-#ifndef f3c_qgates_RotationTFXY_hpp
-#define f3c_qgates_RotationTFXY_hpp
+#ifndef f3c_qgates_RotationTFYZ_hpp
+#define f3c_qgates_RotationTFYZ_hpp
 
 #include "f3c/qgates/TFTwoAxesQRotationGate2.hpp"
 #include "f3c/qasm.hpp"
+#include "qclab/qgates/RotationX.hpp"
+#include "qclab/qgates/RotationZ.hpp"
+#include "qclab/qgates/CNOT.hpp"
+#include "qclab/QCircuit.hpp"
 
 namespace f3c {
 
   namespace qgates {
 
     /**
-     * \class RotationTFXY
+     * \class RotationTFYZ
      * \brief 2-qubit transverse field rotation gate about XY.
      */
     template <typename T>
-    class RotationTFXY : public TFTwoAxesQRotationGate2< T >
+    class RotationTFYZ : public TFTwoAxesQRotationGate2< T >
     {
 
       public:
-        /// Real value type of this TFXY-rotation gate.
+        /// Real value type of this TFYZ-rotation gate.
         using real_type = qclab::real_t< T > ;
-        /// Quantum rotation type of this TFXY-rotation gate.
+        /// Quantum rotation type of this TFYZ-rotation gate.
         using rotation_type = qclab::QRotation< real_type > ;
 
         /**
-         * \brief Default constructor. Constructs a TFXY-rotation gate on
+         * \brief Default constructor. Constructs a TFYZ-rotation gate on
          *        qubits 0 and 1 with parameters \f$\theta_0 = \theta_1 =
          *        \theta_2 = \theta_3 = \theta_4 = \theta_5 = 0\f$.
          */
-        RotationTFXY()
+        RotationTFYZ()
         : TFTwoAxesQRotationGate2< T >()
-        { } // RotationTFXY()
+        { } // RotationTFYZ()
 
         /**
-         * \brief Constructs a TFXY-rotation gate on qubits 0 and 1 with
+         * \brief Constructs a TFYZ-rotation gate on qubits 0 and 1 with
          *        the given quantum rotations
          *          `rot0` = \f$\theta_0\f$, `rot1` = \f$\theta_1\f$,
          *          `rot2` = \f$\theta_2\f$, `rot3` = \f$\theta_3\f$,
          *          `rot4` = \f$\theta_4\f$, `rot5` = \f$\theta_5\f$.
          */
-        RotationTFXY( const rotation_type& rot0 , const rotation_type& rot1 ,
+        RotationTFYZ( const rotation_type& rot0 , const rotation_type& rot1 ,
                       const rotation_type& rot2 , const rotation_type& rot3 ,
                       const rotation_type& rot4 , const rotation_type& rot5 )
         : TFTwoAxesQRotationGate2< T >( 0 , 1 , rot0 , rot1 , rot2 , rot3 ,
                                         rot4 , rot5)
-        { } // RotationTFXY(rot0,rot1,rot2,rot3,rot4,rot5)
+        { } // RotationTFYZ(rot0,rot1,rot2,rot3,rot4,rot5)
 
         /**
-         * \brief Constructs a TFXY-rotation gate on qubits 0 and 1 with
+         * \brief Constructs a TFYZ-rotation gate on qubits 0 and 1 with
          *        the given values
          *          `theta0` = \f$\theta_0\f$, `theta1` = \f$\theta_1\f$,
          *          `theta2` = \f$\theta_2\f$, `theta3` = \f$\theta_3\f$,
          *          `theta4` = \f$\theta_4\f$, `theta5` = \f$\theta_5\f$.
          */
-        RotationTFXY( const real_type theta0 , const real_type theta1 ,
+        RotationTFYZ( const real_type theta0 , const real_type theta1 ,
                       const real_type theta2 , const real_type theta3 ,
                       const real_type theta4 , const real_type theta5 )
         : TFTwoAxesQRotationGate2< T >( 0 , 1 ,
@@ -64,31 +68,31 @@ namespace f3c {
                                         rotation_type( theta3 ) ,
                                         rotation_type( theta4 ) ,
                                         rotation_type( theta5 ) )
-        { } // RotationTFXY(theta0,theta1,theta2,theta3,theta4,theta5)
+        { } // RotationTFYZ(theta0,theta1,theta2,theta3,theta4,theta5)
 
         /**
-         * \brief Constructs a TFXY-rotation gate on the given qubits `qubit0`
+         * \brief Constructs a TFYZ-rotation gate on the given qubits `qubit0`
          *        and `qubit1` with quantum rotations
          *          `rot0` = \f$\theta_0\f$, `rot1` = \f$\theta_1\f$,
          *          `rot2` = \f$\theta_2\f$, `rot3` = \f$\theta_3\f$,
          *          `rot4` = \f$\theta_4\f$, `rot5` = \f$\theta_5\f$.
          */
-        RotationTFXY( const int qubit0 , const int qubit1 ,
+        RotationTFYZ( const int qubit0 , const int qubit1 ,
                       const rotation_type& rot0 , const rotation_type& rot1 ,
                       const rotation_type& rot2 , const rotation_type& rot3 ,
                       const rotation_type& rot4 , const rotation_type& rot5 )
         : TFTwoAxesQRotationGate2< T >( qubit0 , qubit1 , rot0 , rot1 ,
                                         rot2 , rot3 , rot4 , rot5 )
-        { } // RotationTFXY(qubit0,qubit1,rot0,rot1,rot2,rot3,rot4,rot5)
+        { } // RotationTFYZ(qubit0,qubit1,rot0,rot1,rot2,rot3,rot4,rot5)
 
         /**
-         * \brief Constructs a TFXY-rotation gate on the given qubits `qubit0`
+         * \brief Constructs a TFYZ-rotation gate on the given qubits `qubit0`
          *        and `qubit1` with values
          *          `theta0` = \f$\theta_0\f$, `theta1` = \f$\theta_1\f$,
          *          `theta2` = \f$\theta_2\f$, `theta3` = \f$\theta_3\f$,
          *          `theta4` = \f$\theta_4\f$, `theta5` = \f$\theta_5\f$.
          */
-        RotationTFXY( const int qubit0 , const int qubit1 ,
+        RotationTFYZ( const int qubit0 , const int qubit1 ,
                       const real_type theta0 , const real_type theta1 ,
                       const real_type theta2 , const real_type theta3 ,
                       const real_type theta4 , const real_type theta5 )
@@ -99,15 +103,15 @@ namespace f3c {
                                         rotation_type( theta3 ) ,
                                         rotation_type( theta4 ) ,
                                         rotation_type( theta5 ) )
-        { } // RotationTFXY(qubit0,qubit1,theta0,theta1,theta2,theta3,theta4,theta5)
+        { } // RotationTFYZ(qubit0,qubit1,theta0,theta1,theta2,theta3,theta4,theta5)
 
         /**
-         * \brief Constructs a TFXY-rotation gate from the given TFXY-rotation
+         * \brief Constructs a TFYZ-rotation gate from the given TFXY-rotation
          *        matrix gate `gate`.
          */
-        RotationTFXY( const RotationTFXYMatrix< T >& gate )
+        RotationTFYZ( const RotationTFXYMatrix< T >& gate )
         : TFTwoAxesQRotationGate2< T >( gate )
-        { } // RotationTFXY(gate)
+        { } // RotationTFYZ(gate)
 
         // nbQubits
 
@@ -123,17 +127,33 @@ namespace f3c {
 
         // setQubits
 
-        /// Returns the unitary matrix corresponding to this TFXY-rotation gate.
+        /// Returns the unitary matrix corresponding to this TFYZ-rotation gate.
         qclab::dense::SquareMatrix< T > matrix() const override {
-          const T a = this->a() ;
-          const T b = this->b() ;
-          const T c = this->c() ;
-          const T d = this->d() ;
           using M = qclab::dense::SquareMatrix< T > ;
-          return M( a , 0 ,       0       , -std::conj(d) ,
-                    0 , b , -std::conj(c) ,       0       ,
-                    0 , c ,  std::conj(b) ,       0       ,
-                    d , 0 ,       0       ,  std::conj(a) ) ;
+          using RX = qclab::qgates::RotationX< T > ;
+          using RZ = qclab::qgates::RotationZ< T > ;
+          using CNOT = qclab::qgates::CNOT< T > ;
+          qclab::QCircuit< T > circuit( 2 , 0 , 2 ) ;
+          circuit[0] = std::make_unique< RX >( 0 , this->theta4() ) ;
+          circuit[1] = std::make_unique< RX >( 1 , this->theta5() ) ;
+          M matrix = circuit.matrix() ;
+          const T i( 0 , 1 ) ;
+          M tmp( i , 0 , 0 , 0 ,
+                 0 , 1 , 0 , 0 ,
+                 0 , 0 , 0 , 1 ,
+                 0 , 0 ,-i , 0 ) ;
+          matrix *= tmp ;
+          circuit[0] = std::make_unique< RX >( 0 , this->theta2() ) ;
+          circuit[1] = std::make_unique< RZ >( 1 , this->theta3() ) ;
+          matrix *= circuit.matrix() ;
+          tmp( 0 , 0 ) = -i ;
+          tmp( 3 , 2 ) =  1 ;
+          tmp( 2 , 3 ) =  i ;
+          matrix *= tmp ;
+          circuit[0] = std::make_unique< RX >( 0 , this->theta0() ) ;
+          circuit[1] = std::make_unique< RX >( 1 , this->theta1() ) ;
+          matrix *= circuit.matrix() ;
+          return matrix ;
         }
 
         // apply
@@ -141,12 +161,12 @@ namespace f3c {
         // print
 
         /**
-         * \brief Writes the QASM code of this TFXY-rotation gate to the given
+         * \brief Writes the QASM code of this TFYZ-rotation gate to the given
          *        `stream`.
          */
         int toQASM( std::ostream& stream ,
                     const int offset = 0 ) const override {
-          stream << qasmTFRxy( this->qubits_[0] + offset ,
+          stream << qasmTFRyz( this->qubits_[0] + offset ,
                                this->qubits_[1] + offset ,
                                this->theta0() , this->theta1() ,
                                this->theta2() , this->theta3() ,
@@ -158,10 +178,10 @@ namespace f3c {
 
         // operator!=
 
-        /// Checks if `other` equals this TFXY-rotation gate.
+        /// Checks if `other` equals this TFYZ-rotation gate.
         inline bool equals( const qclab::QObject< T >& other ) const override {
-          using TFXY = RotationTFXY< T > ;
-          if ( const TFXY* p = dynamic_cast< const TFXY* >( &other ) ) {
+          using TFYZ = RotationTFYZ< T > ;
+          if ( const TFYZ* p = dynamic_cast< const TFYZ* >( &other ) ) {
             const auto [ other0 , other1 , other2 ,
                          other3 , other4 , other5 ] = p->rotations() ;
             const auto [ this0 , this1 , this2 ,
@@ -189,15 +209,15 @@ namespace f3c {
 
         // d
 
-        /// Multiplies `rhs` to this 2-qubit TFXY-rotation gate.
-        inline RotationTFXY< T >& operator*=( const RotationTFXY< T >& rhs ) {
+        /// Multiplies `rhs` to this 2-qubit TFYZ-rotation gate.
+        inline RotationTFYZ< T >& operator*=( const RotationTFYZ< T >& rhs ) {
           assert( this->qubits()[0] == rhs.qubits()[0] ) ;
           assert( this->qubits()[1] == rhs.qubits()[1] ) ;
           using TFXYMatrix = RotationTFXYMatrix< T > ;
           // fuse
           RotationTFXYMatrix< T > matrix( *this ) ;
           matrix *= RotationTFXYMatrix< T >( rhs ) ;
-          const RotationTFXY< T > tmp( matrix ) ;
+          const RotationTFYZ< T > tmp( matrix ) ;
           // update
           this->rot_[0] = tmp.rotation0() ;
           this->rot_[1] = tmp.rotation1() ;
@@ -209,15 +229,15 @@ namespace f3c {
         }
 
         /// Multiplies `lhs` and `rhs`.
-        friend RotationTFXY< T > operator*( RotationTFXY< T > lhs ,
-                                            const RotationTFXY< T >& rhs ) {
+        friend RotationTFYZ< T > operator*( RotationTFYZ< T > lhs ,
+                                            const RotationTFYZ< T >& rhs ) {
           assert( lhs.qubits()[0] == rhs.qubits()[0] ) ;
           assert( lhs.qubits()[1] == rhs.qubits()[1] ) ;
           lhs *= rhs ;
           return lhs ;
         }
 
-    } ; // class RotationTFXY
+    } ; // class RotationTFYZ
 
   } // namespace qgates
 

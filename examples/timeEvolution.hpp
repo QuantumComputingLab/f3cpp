@@ -52,15 +52,27 @@ std::string printTimestep( const int i ,
 }
 
 
-template <typename C, typename P>
+template <typename F, typename C, typename P>
 void qasm( const C& circuit , const size_t i , const double dt ,
            const P* hx , const P* hy , const P* hz ,
            const P* Jx , const P* Jy , const P* Jz ,
            std::string filename ) {
 
+  using gate_type = typename F::gate_type ;
+  using qasm_gate_type = typename F::qasm_gate_type ;
+
   // generate qasm
   std::stringstream qasm ;
-  circuit.toQASM( qasm ) ;
+  if constexpr ( std::is_same_v< gate_type , qasm_gate_type > ) {
+    circuit.toQASM( qasm ) ;
+  } else {
+    using T = typename F::value_type ;
+    qclab::QCircuit< T , qasm_gate_type >  tmpcircuit( circuit.nbQubits() ) ;
+    for ( auto it = circuit.begin(); it != circuit.end(); ++it ) {
+      tmpcircuit.push_back( std::make_unique< qasm_gate_type >( **it ) ) ;
+    }
+    tmpcircuit.toQASM( qasm ) ;
+  }
 
   // write to file
   filename.append( std::to_string( i+1 ) ) ;
@@ -115,7 +127,7 @@ int timeEvolution( const int N , const int ntot , const double dt ,
       }
       // output
       if ( out == i+1 && i+1 <= imax ) {
-        qasm( circuit , i , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
+        qasm< F >( circuit , i , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
         out += step ;
       }
     }
@@ -146,7 +158,7 @@ int timeEvolution( const int N , const int ntot , const double dt ,
           auto gate = *square[k] ;
           tmpsquare[k] = std::make_unique< decltype( gate ) >( gate ) ;
         }
-        qasm( tmpsquare , i , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
+        qasm< F >( tmpsquare , i , dt , hx , hy , hz , Jx , Jy , Jz , filename);
         out += step ;
       }
     }
@@ -183,7 +195,7 @@ int timeEvolution( const int N , const int ntot , const double dt ,
       if ( out == N/2+1 && N/2+1 <= imax ) {
         f3c::TriangleCircuit< T , G >  tmptriangle( triangle ) ;
         circuit = tmptriangle.toSquare() ;
-        qasm( circuit , N/2 , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
+        qasm< F >( circuit , N/2 , dt , hx , hy , hz , Jx , Jy , Jz , filename);
         out += step ;
         if ( debug ) std::printf( "  --> nrmF = %.4e\n" ,
                                   qclab::nrmF( circuit , tmpcircuit ) ) ;
@@ -217,7 +229,7 @@ int timeEvolution( const int N , const int ntot , const double dt ,
       if ( out == i+1 && i+1 <= imax ) {
         f3c::TriangleCircuit< T , G >  tmptriangle( triangle ) ;
         circuit = tmptriangle.toSquare() ;
-        qasm( circuit , i , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
+        qasm< F >( circuit , i , dt , hx , hy , hz , Jx , Jy , Jz , filename ) ;
         out += step ;
         if ( debug ) std::printf( "  --> nrmF = %.4e\n" ,
                                   qclab::nrmF( circuit , tmpcircuit ) ) ;
